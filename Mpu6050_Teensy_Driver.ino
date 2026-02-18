@@ -1,4 +1,4 @@
-#include <Wire.h>
+#include "mpu6050.h"
 
 #define MPU_ADDR 0x68
 #define LSB_SENSITIVITY 16384
@@ -7,39 +7,21 @@ void setup() {
   Wire.begin();
   Serial.begin(115200);
 
-  Wire.beginTransmission(MPU_ADDR);
-  Wire.write(0x6B);
-  Wire.write(0);
-  Wire.endTransmission(true);
+  byte err = initialize_imu();
+  if(err != 0) {
+    Serial.println("An error occured while initializing the imu");
+  }
 }
 
 void loop() {
-  Wire.beginTransmission(MPU_ADDR);
-  Wire.write(0x3B);
-  Wire.endTransmission(false);
-
-  Wire.requestFrom(MPU_ADDR, 2);
-  int16_t acc_x = Wire.read() << 8 | Wire.read();
-  float acc_x_g = (float)acc_x/LSB_SENSITIVITY;
+  float acc_x_g = get_x_acceleration();
   Serial.printf("Acc. x: %.2f\n", acc_x_g);
 
-  Wire.beginTransmission(MPU_ADDR);
-  Wire.write(0x3D);
-  Wire.endTransmission(false);
-
-  Wire.requestFrom(MPU_ADDR, 2);
-  int16_t acc_y = Wire.read() << 8 | Wire.read();
-  float acc_y_g = (float)acc_y/LSB_SENSITIVITY;
+  float acc_y_g = get_y_acceleration();
   Serial.printf("Acc. y: %.2f\n", acc_y_g);
 
-  Wire.beginTransmission(MPU_ADDR);
-  Wire.write(0x3F);
-  Wire.endTransmission(false);
-
-  Wire.requestFrom(MPU_ADDR, 2);
-  int16_t acc_z = Wire.read() << 8 | Wire.read();
-  float acc_z_g = (float)acc_z/LSB_SENSITIVITY;
+  float acc_z_g = get_z_acceleration();
   Serial.printf("Acc. z: %.2f\n\n", acc_z_g);
   
-  delay(500);
+  delay(100);
 }
