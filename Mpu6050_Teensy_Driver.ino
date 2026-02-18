@@ -11,6 +11,12 @@ void setup() {
   if(err != 0) {
     Serial.println("An error occured while initializing the imu");
   }
+
+  err = set_accelerometer_range(0);
+  if(err != 0) {
+    Serial.println("An error while setting the accelerometer range");
+    Serial.println("Defaulting to 2g");
+  }
 }
 
 void loop() {

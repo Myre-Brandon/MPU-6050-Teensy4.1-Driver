@@ -4,6 +4,7 @@
 #include <Wire.h>
 
 #define MPU_ADDR 0x68
+#define ACC_CONFIG_REG 0x1C
 #define ACC_X_REG 0x3B
 #define ACC_Y_REG 0x3D
 #define ACC_Z_REG 0x3F
@@ -19,5 +20,7 @@ float get_x_acceleration();
 float get_y_acceleration();
 
 float get_z_acceleration();
+
+uint8_t set_accelerometer_range(uint8_t range); // 0 to 4
 
 #endif
